@@ -1,3 +1,4 @@
 #include "neural.h"
 
-// TODO: implement
+double pass(double x) { return x; }
+

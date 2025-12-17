@@ -1,33 +1,33 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
-#include "linalg.h"
+#include "matrix.h"
 #include "linreg.h"
 #include "util.h"
 
 void LRInit(LinearRegression *lr, int n) {
   lr->n = n;
-  lr->w = (double *)calloc(n, sizeof(double));
+  lr->w = vector(n);
   init_random(lr->w, n);
   lr->b = rand_float();
 }
 
-double LREval(LinearRegression *lr, double *x) {
+double LREval(LinearRegression *lr, vec x) {
   return dot_product(lr->w, x, lr->n) + lr->b;
 }
 
-double LRCost(LinearRegression *lr, double *x, double y) {
+double LRCost(LinearRegression *lr, vec x, double y) {
   double y_pred = dot_product(lr->w, x, lr->n) + lr->b;
 
   return (y_pred - y) * (y_pred - y);
 }
 
-void LRFit(LinearRegression *lr, double *X, double *y, int k, int epochs,
+void LRFit(LinearRegression *lr, vec X, vec y, int k, int epochs,
            double alpha) {
   int n = lr->n;
 
-  double *dw = (double *)calloc(n, sizeof(double));
+  vec dw = vector(n);
+
   for (int epoch = 1; epoch <= epochs; epoch++) {
     double db = 0;
 

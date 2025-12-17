@@ -1,16 +1,18 @@
 #ifndef LINREG_H
 #define LINREG_H
 
+#include "util.h"
+
 typedef struct {
   int n;
-  double *w;
+  vec w;
   double b;
 } LinearRegression;
 
 void LRInit(LinearRegression *lr, int n);
-double LREval(LinearRegression *lr, double *x);
-double LRCost(LinearRegression *lr, double *x, double y);
-void LRFit(LinearRegression *lr, double *X, double *y, int k, int epochs,
+double LREval(LinearRegression *lr, vec x);
+double LRCost(LinearRegression *lr, vec x, double y);
+void LRFit(LinearRegression *lr, vec X, vec y, int k, int epochs,
              double alpha);
 
 #endif

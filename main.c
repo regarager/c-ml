@@ -5,7 +5,7 @@
 #include "linreg.h"
 #include "util.h"
 
-double f(double *x) { return x[0] + 2 * x[1] + 3 * x[2] + 4; }
+double f(vec x) { return x[0] + 2 * x[1] + 3 * x[2] + 4; }
 
 int main() {
   srand(time(NULL));
@@ -15,10 +15,10 @@ int main() {
 
   LRInit(&lr, n);
 
-  double *X = (double *)calloc(n * k, sizeof(double));
-  double *y = (double *)calloc(k, sizeof(double));
+  vec X = vector(n * k);
+  vec y = vector(k);
 
-  double *x_test = (double *)calloc(n, sizeof(double));
+  vec x_test = vector(n);
   init_random(x_test, 3);
 
   double y_pred = LREval(&lr, x_test);

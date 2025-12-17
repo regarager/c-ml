@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-FILES="main.c matrix.c linreg.c util.c"
+FILES="test.c matrix.c linreg.c util.c"
 
 set -e
 gcc -Wall -Wextra $FILES -o run
