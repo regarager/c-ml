@@ -26,4 +26,6 @@ Network *network(int L, ...);
 vec NEval(Network *nn, vec x, vec *activations);
 void free_network(Network *nn);
 
+vec* init_activations(Network *nn);
+
 #endif

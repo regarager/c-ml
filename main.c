@@ -30,7 +30,6 @@ int main() {
   activations[2] = vector(1);
   activations[3] = y;
 
-
   NEval(nn, x, activations);
 
   printf("%f\n", activations[3][0]);

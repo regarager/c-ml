@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "matrix.h"
 #include "linreg.h"
+#include "matrix.h"
 #include "util.h"
 
 void LRInit(LinearRegression *lr, int n) {

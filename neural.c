@@ -74,3 +74,13 @@ void free_network(Network *nn) {
   free(nn->layers);
   free(nn);
 }
+
+vec *init_activations(Network *nn) {
+  vec *activations = (vec *)calloc(nn->L, sizeof(vec));
+
+  for (int i = 0; i < nn->L; i++) {
+    activations[i] = vector(nn->layers[i]->out);
+  }
+
+  return activations;
+}
