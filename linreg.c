@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "matrix.h"
@@ -9,7 +10,7 @@ void LRInit(LinearRegression *lr, int n) {
   lr->n = n;
   lr->w = vector(n);
   init_random(lr->w, n);
-  lr->b = rand_float();
+  lr->b = random_float();
 }
 
 double LREval(LinearRegression *lr, vec x) {
@@ -55,4 +56,6 @@ void LRFit(LinearRegression *lr, vec X, vec y, int k, int epochs,
       printf("epoch: %d, cost: %f\n", epoch, cost);
     }
   }
+
+  free(dw);
 }

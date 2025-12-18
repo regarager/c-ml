@@ -1,37 +1,37 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-#include "linreg.h"
+#include "neural.h"
 #include "util.h"
 
 double f(vec x) { return x[0] + 2 * x[1] + 3 * x[2] + 4; }
+double sigmoid(double x) { return 1 / (1 + exp(-x)); }
 
 int main() {
   srand(time(NULL));
-  LinearRegression lr;
-  int n = 3;
-  int k = 1000;
 
-  LRInit(&lr, n);
+  int L = 4;
+  Layer *l1 = layer(2, 100, pass);
+  Layer *l2 = layer(100, 100, sigmoid);
+  Layer *l3 = layer(100, 1, pass);
+  Layer *l4 = layer(1, 1, sigmoid);
 
-  vec X = vector(n * k);
-  vec y = vector(k);
+  Network *nn = network(L, l1, l2, l3, l4);
 
-  vec x_test = vector(n);
-  init_random(x_test, 3);
+  vec x = vec_from(2, 1, 1);
+  vec y = vector(1);
 
-  double y_pred = LREval(&lr, x_test);
-  printf("y_pred: %f, y: %f\n", y_pred, f(x_test));
+  vec *activations = (vec *)calloc(L, sizeof(vec));
 
-  for (int i = 0; i < k; i++) {
-    init_random(X + i * n, n);
+  activations[0] = vector(100);
+  activations[1] = vector(100);
+  activations[2] = vector(1);
+  activations[3] = y;
 
-    y[i] = f(X + i * n);
-  }
 
-  LRFit(&lr, X, y, k, 10000, 0.01);
+  NEval(nn, x, activations);
 
-  y_pred = LREval(&lr, x_test);
-  printf("y_pred: %f, y: %f\n", y_pred, f(x_test));
+  printf("%f\n", activations[3][0]);
 }

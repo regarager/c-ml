@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
-FILES="main.c matrix.c linreg.c util.c"
+entry="${1:-main.c}"
+
+FILES="$entry linreg.c matrix.c neural.c util.c"
 
 set -e
-gcc -Wall -Wextra $FILES -o run
-./run
-rm ./run
+mkdir -p build
+gcc -Wall -Wextra -lm -g -o build/main $FILES
+./build/main

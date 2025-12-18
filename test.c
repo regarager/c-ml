@@ -2,14 +2,17 @@
 #include "util.h"
 
 int main() {
-  vec A = vector(2 * 2);
-  vec B = vector(2 * 2);
-  for (int i = 0; i < 4; i++) {
-    A[i] = i + 1;
-    B[i] = i + 5;
-  }
-  
-  vec C = vector(2 * 2);
+  Matrix *A = matrix(2, 2);
+  Matrix *B = matrix(2, 2);
 
-  matmul(A, B, C, 2, 2, 2);
+  for (int i = 0; i < 2; i++) {
+    for (int j = 0; j < 2; j++) {
+      *M(A, i, j) = i * 2 + j + 1;
+      *M(B, i, j) = i * 2 + j + 5;
+    }
+  }
+
+  Matrix *C = matrix(2, 2);
+
+  matmul(A, B, C);
 }
