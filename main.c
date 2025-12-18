@@ -21,14 +21,7 @@ int main() {
   Network *nn = network(L, l1, l2, l3, l4);
 
   vec x = vec_from(2, 1, 1);
-  vec y = vector(1);
-
-  vec *activations = (vec *)calloc(L, sizeof(vec));
-
-  activations[0] = vector(100);
-  activations[1] = vector(100);
-  activations[2] = vector(1);
-  activations[3] = y;
+  vec *activations = init_activations(nn);
 
   NEval(nn, x, activations);
 
