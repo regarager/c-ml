@@ -10,25 +10,25 @@ typedef struct {
   vec b;
   func activation;
   func d_activation;
-} Layer;
+} layer_t;
 
 typedef struct {
   int L;
-  Layer **layers;
-} Network;
+  layer_t **layers;
+} neural_t;
 
 double pass(double x);
 double d_pass(double x);
 
-Layer *layer(int in, int out, func activation, func d_activation);
-void LEval(Layer *l, vec x, vec z);
-void free_layer(Layer *l);
+layer_t *layer(int in, int out, func activation, func d_activation);
+void layer_eval(layer_t *l, vec x, vec z);
+void free_layer(layer_t *l);
 
-Network *network(int L, ...);
-vec NEval(Network *nn, vec x, vec *activations);
-void NFit(Network *nn, vec X, vec Y, int k, int epochs, double alpha);
-void free_network(Network *nn);
+neural_t *neural(int L, ...);
+vec neural_eval(neural_t *nn, vec x, vec *activations);
+void neural_fit(neural_t *nn, vec X, vec Y, int k, int epochs, double alpha);
+void free_network(neural_t *nn);
 
-vec *init_activations(Network *nn);
+vec *init_activations(neural_t *nn);
 
 #endif

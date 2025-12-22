@@ -2,28 +2,32 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "linreg.h"
+#include "linear.h"
 #include "matrix.h"
 #include "util.h"
 
-void LRInit(LinearRegression *lr, int n) {
+linear_t* linr(int n) {
+  linear_t* lr = (linear_t*) malloc(sizeof(linear_t));
+
   lr->n = n;
   lr->w = vector(n);
   init_random(lr->w, n);
   lr->b = random_float();
+
+  return lr;
 }
 
-double LREval(LinearRegression *lr, vec x) {
+double linr_eval(linear_t *lr, vec x) {
   return dot_product(lr->w, x, lr->n) + lr->b;
 }
 
-double LRCost(LinearRegression *lr, vec x, double y) {
-  double y_pred = LREval(lr, x);
+double linr_cost(linear_t *lr, vec x, double y) {
+  double y_pred = linr_eval(lr, x);
 
   return (y_pred - y) * (y_pred - y);
 }
 
-void LRFit(LinearRegression *lr, vec X, vec y, int k, int epochs,
+void linr_fit(linear_t *lr, vec X, vec y, int k, int epochs,
            double alpha) {
   int n = lr->n;
 
@@ -35,7 +39,7 @@ void LRFit(LinearRegression *lr, vec X, vec y, int k, int epochs,
     double cost = 0;
 
     for (int i = 0; i < k; i++) {
-      double error = (LREval(lr, X + n * i) - y[i]) / k;
+      double error = (linr_eval(lr, X + n * i) - y[i]) / k;
       cost += error * error * k * 0.5;
 
       for (int j = 0; j < n; j++) {
