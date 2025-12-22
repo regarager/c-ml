@@ -8,14 +8,19 @@ typedef struct {
   double *values;
 } Matrix;
 
+#define MAP(v, n, f)                                                           \
+  do {                                                                         \
+    for (int i = 0; i < n; i++) {                                              \
+      v[i] = f;                                                                \
+    }                                                                          \
+  } while (0)
+
 vec vector(int n);
 vec vec_from(int n, ...);
 void add(vec v1, vec v2, vec v3, int n);
 void mul(vec v1, int c, vec v2, int n);
 double dot_product(vec a, vec b, int n);
 void init_random(vec src, int n);
-void map(vec src, int n, double (*f)(double x));
-void mapi(vec src, int n, double (*)(double x, int index));
 
 double *M(Matrix *m, int i, int j);
 Matrix *matrix(int m, int n);

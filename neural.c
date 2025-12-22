@@ -25,7 +25,7 @@ void layer_eval(layer_t *l, vec x, vec z) {
 
   matmul(l->W, x_mat, z_mat);
   add(z_mat->values, l->b, z_mat->values, l->out);
-  map(z, l->out, l->activation);
+  MAP(z, l->out, l->activation(z[i]));
 
   free(x_mat);
   free(z_mat);
