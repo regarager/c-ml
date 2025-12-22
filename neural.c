@@ -5,8 +5,9 @@
 #include "util.h"
 
 double pass(double x) { return x; }
+double d_pass(double x) { return 1; }
 
-Layer *layer(int in, int out, func activation) {
+Layer *layer(int in, int out, func activation, func d_activation) {
   Layer *l = (Layer *)malloc(sizeof(Layer));
 
   l->in = in;
@@ -14,6 +15,7 @@ Layer *layer(int in, int out, func activation) {
   l->W = matrix(out, in);
   l->b = vector(out);
   l->activation = activation;
+  l->d_activation = d_activation;
 
   init_random(l->W->values, l->in * l->out);
   init_random(l->b, l->out);
@@ -83,4 +85,51 @@ vec *init_activations(Network *nn) {
   }
 
   return activations;
+}
+
+typedef struct {
+  Matrix *da_dz;
+  Matrix *dz_dw; // wrt weights
+  Matrix *dz_dx; // i think just W?
+  vec dz_db;
+  func d_activation;
+} _derivative;
+
+_derivative *init_derivative(Layer *l) {
+  _derivative *d = (_derivative *)malloc(sizeof(_derivative));
+
+  // TODO: implement sizes
+  d->da_dz = matrix(-1, -1);
+  d->dz_dw = matrix(-1, -1);
+  d->dz_dx = matrix(-1, -1);
+  d->dz_db = vector(-1);
+
+  d->d_activation = l->d_activation;
+
+  return d;
+}
+
+void NFit(Network *nn, vec X, vec Y, int k, int epochs, double alpha) {
+  int L = nn->L;
+  int in = nn->layers[0]->in;
+  vec *activations = init_activations(nn);
+
+  _derivative **D = (_derivative **)calloc(L, sizeof(_derivative *));
+  for (int i = 0; i < L; i++) {
+    D[i] = init_derivative(nn->layers[i]);
+  }
+
+  for (int epoch = 1; epoch <= epochs; epoch++) {
+    for (int i = 0; i < k; i++) {
+      vec y = NEval(nn, X + i * in, activations);
+
+      // TODO: backpropagation
+    }
+  }
+
+  for (int i = 0; i < L; i++) {
+    free(activations[i]);
+  }
+
+  free(activations);
 }

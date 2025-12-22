@@ -8,15 +8,16 @@
 
 double f(vec x) { return x[0] + 2 * x[1] + 3 * x[2] + 4; }
 double sigmoid(double x) { return 1 / (1 + exp(-x)); }
+double d_sigmoid(double y) { return y * (1 - y); };
 
 int main() {
   srand(time(NULL));
 
   int L = 4;
-  Layer *l1 = layer(2, 100, pass);
-  Layer *l2 = layer(100, 100, sigmoid);
-  Layer *l3 = layer(100, 1, pass);
-  Layer *l4 = layer(1, 1, sigmoid);
+  Layer *l1 = layer(2, 100, pass, d_pass);
+  Layer *l2 = layer(100, 100, sigmoid, d_sigmoid);
+  Layer *l3 = layer(100, 1, pass, d_pass);
+  Layer *l4 = layer(1, 1, sigmoid, d_sigmoid);
 
   Network *nn = network(L, l1, l2, l3, l4);
 

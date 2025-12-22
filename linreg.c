@@ -18,7 +18,7 @@ double LREval(LinearRegression *lr, vec x) {
 }
 
 double LRCost(LinearRegression *lr, vec x, double y) {
-  double y_pred = dot_product(lr->w, x, lr->n) + lr->b;
+  double y_pred = LREval(lr, x);
 
   return (y_pred - y) * (y_pred - y);
 }
@@ -35,7 +35,7 @@ void LRFit(LinearRegression *lr, vec X, vec y, int k, int epochs,
     double cost = 0;
 
     for (int i = 0; i < k; i++) {
-      double error = (dot_product(lr->w, X + n * i, n) + lr->b - y[i]) / k;
+      double error = (LREval(lr, X + n * i) - y[i]) / k;
       cost += error * error * k * 0.5;
 
       for (int j = 0; j < n; j++) {
