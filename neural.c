@@ -2,10 +2,6 @@
 #include <stdlib.h>
 
 #include "neural.h"
-#include "util.h"
-
-double pass(double x) { return x; }
-double d_pass(double x) { return 1; }
 
 layer_t *layer(int in, int out, func activation, func d_activation) {
   layer_t *l = (layer_t *)malloc(sizeof(layer_t));

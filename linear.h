@@ -1,7 +1,7 @@
 #ifndef LINEAR_H
 #define LINEAR_H
 
-#include "util.h"
+#include "matrix.h"
 
 typedef struct {
   int n;

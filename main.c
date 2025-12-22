@@ -7,8 +7,6 @@
 #include "util.h"
 
 double f(vec x) { return x[0] + 2 * x[1] + 3 * x[2] + 4; }
-double sigmoid(double x) { return 1 / (1 + exp(-x)); }
-double d_sigmoid(double y) { return y * (1 - y); };
 
 int main() {
   srand(time(NULL));

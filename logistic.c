@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "logistic.h"
+#include "util.h"
 
 logistic_t *logr(int n) {
   logistic_t *lr = (logistic_t *)malloc(sizeof(logistic_t));

@@ -1,7 +1,7 @@
 #ifndef LOGISTIC_H
 #define LOGISTIC_H
 
-#include "util.h"
+#include "matrix.h"
 
 typedef struct {
   int n;
