@@ -9,10 +9,13 @@
 logistic_t *logr(int n) {
   logistic_t *lr = (logistic_t *)malloc(sizeof(logistic_t));
 
-  lr->n = n;
-  lr->w = vector(n);
+  *lr = (logistic_t){
+      .n = n,
+      .w = vector(n),
+      .b = random_float(),
+  };
+
   init_random(lr->w, n);
-  lr->b = random_float();
 
   return lr;
 }

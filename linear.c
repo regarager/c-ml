@@ -6,13 +6,16 @@
 #include "matrix.h"
 #include "util.h"
 
-linear_t* linr(int n) {
-  linear_t* lr = (linear_t*) malloc(sizeof(linear_t));
+linear_t *linr(int n) {
+  linear_t *lr = (linear_t *)malloc(sizeof(linear_t));
 
-  lr->n = n;
-  lr->w = vector(n);
+  *lr = (linear_t){
+      .n = n,
+      .w = vector(n),
+      .b = random_float(),
+  };
+
   init_random(lr->w, n);
-  lr->b = random_float();
 
   return lr;
 }
@@ -27,8 +30,7 @@ double linr_cost(linear_t *lr, vec x, double y) {
   return (y_pred - y) * (y_pred - y);
 }
 
-void linr_fit(linear_t *lr, vec X, vec y, int k, int epochs,
-           double alpha) {
+void linr_fit(linear_t *lr, vec X, vec y, int k, int epochs, double alpha) {
   int n = lr->n;
 
   vec dw = vector(n);

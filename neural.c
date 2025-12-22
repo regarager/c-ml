@@ -6,12 +6,14 @@
 layer_t *layer(int in, int out, func activation, func d_activation) {
   layer_t *l = (layer_t *)malloc(sizeof(layer_t));
 
-  l->in = in;
-  l->out = out;
-  l->W = matrix(out, in);
-  l->b = vector(out);
-  l->activation = activation;
-  l->d_activation = d_activation;
+  *l = (layer_t){
+      .in = in,
+      .out = out,
+      .W = matrix(out, in),
+      .b = vector(out),
+      .activation = activation,
+      .d_activation = d_activation,
+  };
 
   init_random(l->W->values, l->in * l->out);
   init_random(l->b, l->out);
@@ -39,6 +41,7 @@ void free_layer(layer_t *l) {
 
 neural_t *neural(int L, ...) {
   neural_t *nn = malloc(sizeof(neural_t));
+
   nn->L = L;
   nn->layers = (layer_t **)calloc(L, sizeof(layer_t *));
 
@@ -95,12 +98,13 @@ _derivative *init_derivative(layer_t *l) {
   _derivative *d = (_derivative *)malloc(sizeof(_derivative));
 
   // TODO: implement sizes
-  d->da_dz = matrix(-1, -1);
-  d->dz_dw = matrix(-1, -1);
-  d->dz_dx = matrix(-1, -1);
-  d->dz_db = vector(-1);
-
-  d->d_activation = l->d_activation;
+  *d = (_derivative){
+      .da_dz = matrix(-1, -1),
+      .dz_dw = matrix(-1, -1),
+      .dz_dx = matrix(-1, -1),
+      .dz_db = vector(-1),
+      .d_activation = l->d_activation,
+  };
 
   return d;
 }

@@ -49,23 +49,7 @@ void free_matrix(Matrix *m) {
   free(m);
 }
 
-void init_random(vec src, int n) {
-  for (int i = 0; i < n; i++) {
-    src[i] = random_float();
-  }
-}
-
-void map(vec src, int n, double (*f)(double)) {
-  for (int i = 0; i < n; i++) {
-    src[i] = f(src[i]);
-  }
-}
-
-void mapi(vec src, int n, double (*f)(double, int)) {
-  for (int i = 0; i < n; i++) {
-    src[i] = f(src[i], i);
-  }
-}
+void init_random(vec src, int n) { MAP(src, n, random_float()); }
 
 vec vector(int n) { return calloc(n, sizeof(double)); }
 
@@ -86,17 +70,24 @@ vec vec_from(int n, ...) {
 
 Matrix *matrix(int m, int n) {
   Matrix *mat = malloc(sizeof(Matrix));
-  mat->m = m;
-  mat->n = n;
-  mat->values = vector(m * n);
+
+  *mat = (Matrix){
+      .m = m,
+      .n = n,
+      .values = vector(m * n),
+  };
+
   return mat;
 }
 
 Matrix *matrix_from(int m, int n, ...) {
   Matrix *mat = malloc(sizeof(Matrix));
-  mat->m = m;
-  mat->n = n;
-  mat->values = vector(m * n);
+
+  *mat = (Matrix){
+      .m = m,
+      .n = n,
+      .values = vector(m * n),
+  };
 
   va_list args;
   va_start(args, n);
@@ -112,9 +103,12 @@ Matrix *matrix_from(int m, int n, ...) {
 
 Matrix *matrix_vec(vec v, int n) {
   Matrix *mat = malloc(sizeof(Matrix));
-  mat->m = n;
-  mat->n = 1;
-  mat->values = v;
+
+  *mat = (Matrix){
+      .m = n,
+      .n = 1,
+      .values = v,
+  };
 
   return mat;
 }
