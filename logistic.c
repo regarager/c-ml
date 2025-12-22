@@ -3,28 +3,32 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "logreg.h"
+#include "logistic.h"
+#include "util.h"
 
-void LgRInit(LogisticRegression *lr, int n) {
+logistic_t *logr(int n) {
+  logistic_t *lr = (logistic_t *)malloc(sizeof(logistic_t));
+
   lr->n = n;
   lr->w = vector(n);
   init_random(lr->w, n);
   lr->b = random_float();
+
+  return lr;
 }
 
-double LgREval(LogisticRegression *lr, vec x) {
+double logr_eval(logistic_t *lr, vec x) {
   double u = dot_product(lr->w, x, lr->n) + lr->b;
   return 1 / (1 + exp(-u));
 }
 
-double LgRCost(LogisticRegression *lr, vec x, double y) {
-  double y_pred = LgREval(lr, x);
+double logr_cost(logistic_t *lr, vec x, double y) {
+  double y_pred = logr_eval(lr, x);
 
   return (y_pred - y) * (y_pred - y);
 }
 
-void LgRFit(LogisticRegression *lr, vec X, vec y, int k, int epochs,
-            double alpha) {
+void logr_fit(logistic_t *lr, vec X, vec y, int k, int epochs, double alpha) {
   int n = lr->n;
 
   vec dw = vector(n);
@@ -35,7 +39,7 @@ void LgRFit(LogisticRegression *lr, vec X, vec y, int k, int epochs,
     double cost = 0;
 
     for (int i = 0; i < k; i++) {
-      double y_pred = LgREval(lr, X + n * i);
+      double y_pred = logr_eval(lr, X + n * i);
 
       if (y_pred == NAN) {
         printf("bad\n");

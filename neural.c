@@ -2,13 +2,9 @@
 #include <stdlib.h>
 
 #include "neural.h"
-#include "util.h"
 
-double pass(double x) { return x; }
-double d_pass(double x) { return 1; }
-
-Layer *layer(int in, int out, func activation, func d_activation) {
-  Layer *l = (Layer *)malloc(sizeof(Layer));
+layer_t *layer(int in, int out, func activation, func d_activation) {
+  layer_t *l = (layer_t *)malloc(sizeof(layer_t));
 
   l->in = in;
   l->out = out;
@@ -23,7 +19,7 @@ Layer *layer(int in, int out, func activation, func d_activation) {
   return l;
 }
 
-void LEval(Layer *l, vec x, vec z) {
+void layer_eval(layer_t *l, vec x, vec z) {
   Matrix *x_mat = matrix_vec(x, l->in);
   Matrix *z_mat = matrix_vec(z, l->out);
 
@@ -35,22 +31,22 @@ void LEval(Layer *l, vec x, vec z) {
   free(z_mat);
 }
 
-void free_layer(Layer *l) {
+void free_layer(layer_t *l) {
   free_matrix(l->W);
   free(l->b);
   free(l);
 }
 
-Network *network(int L, ...) {
-  Network *nn = malloc(sizeof(Network));
+neural_t *neural(int L, ...) {
+  neural_t *nn = malloc(sizeof(neural_t));
   nn->L = L;
-  nn->layers = (Layer **)calloc(L, sizeof(Layer *));
+  nn->layers = (layer_t **)calloc(L, sizeof(layer_t *));
 
   va_list args;
   va_start(args, L);
 
   for (int i = 0; i < L; i++) {
-    nn->layers[i] = va_arg(args, Layer *);
+    nn->layers[i] = va_arg(args, layer_t *);
   }
 
   va_end(args);
@@ -58,17 +54,17 @@ Network *network(int L, ...) {
   return nn;
 }
 
-vec NEval(Network *nn, vec x, vec *activations) {
-  LEval(nn->layers[0], x, activations[0]);
+vec neural_eval(neural_t *nn, vec x, vec *activations) {
+  layer_eval(nn->layers[0], x, activations[0]);
 
   for (int i = 1; i < nn->L; i++) {
-    LEval(nn->layers[i], activations[i - 1], activations[i]);
+    layer_eval(nn->layers[i], activations[i - 1], activations[i]);
   }
 
   return activations[nn->L - 1];
 }
 
-void free_network(Network *nn) {
+void free_network(neural_t *nn) {
   for (int i = 0; i < nn->L; i++) {
     free_layer(nn->layers[i]);
   }
@@ -77,7 +73,7 @@ void free_network(Network *nn) {
   free(nn);
 }
 
-vec *init_activations(Network *nn) {
+vec *init_activations(neural_t *nn) {
   vec *activations = (vec *)calloc(nn->L, sizeof(vec));
 
   for (int i = 0; i < nn->L; i++) {
@@ -95,7 +91,7 @@ typedef struct {
   func d_activation;
 } _derivative;
 
-_derivative *init_derivative(Layer *l) {
+_derivative *init_derivative(layer_t *l) {
   _derivative *d = (_derivative *)malloc(sizeof(_derivative));
 
   // TODO: implement sizes
@@ -109,7 +105,7 @@ _derivative *init_derivative(Layer *l) {
   return d;
 }
 
-void NFit(Network *nn, vec X, vec Y, int k, int epochs, double alpha) {
+void neural_fit(neural_t *nn, vec X, vec Y, int k, int epochs, double alpha) {
   int L = nn->L;
   int in = nn->layers[0]->in;
   vec *activations = init_activations(nn);
@@ -121,7 +117,7 @@ void NFit(Network *nn, vec X, vec Y, int k, int epochs, double alpha) {
 
   for (int epoch = 1; epoch <= epochs; epoch++) {
     for (int i = 0; i < k; i++) {
-      vec y = NEval(nn, X + i * in, activations);
+      vec y = neural_eval(nn, X + i * in, activations);
 
       // TODO: backpropagation
     }

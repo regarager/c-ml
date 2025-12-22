@@ -2,7 +2,7 @@
 
 entry="${1:-main.c}"
 
-FILES="$entry linreg.c logreg.c matrix.c neural.c util.c"
+FILES="$entry linear.c logistic.c matrix.c neural.c util.c"
 
 set -e
 mkdir -p build

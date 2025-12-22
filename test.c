@@ -1,13 +1,11 @@
 #include <stdio.h>
 
-#include "logreg.h"
+#include "logistic.h"
 #include "util.h"
 
 int main() {
-  LogisticRegression lr;
   int n = 10;
-
-  LgRInit(&lr, n);
+  logistic_t *lr = logr(n);
 
   int k = 1000;
 
@@ -24,7 +22,7 @@ int main() {
     y[i] = (double)(tot > 1);
   }
 
-  LgRFit(&lr, X, y, k, 100000, 0.05);
+  logr_fit(lr, X, y, k, 100000, 0.05);
 
   vec x_test = vector(10);
 
@@ -32,5 +30,5 @@ int main() {
     x_test[i] = 0.12;
   }
 
-  printf("%f\n", LgREval(&lr, x_test));
+  printf("%f\n", logr_eval(lr, x_test));
 }
