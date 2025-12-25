@@ -20,21 +20,22 @@ logistic_t *logr(int n) {
   return lr;
 }
 
-double logr_eval(logistic_t *lr, vec x) {
-  double u = dot_product(lr->w, x, lr->n) + lr->b;
+double logr_eval(logistic_t *lr, vector_t x) {
+  double u = vec_dot(lr->w, x, lr->n) + lr->b;
   return 1 / (1 + exp(-u));
 }
 
-double logr_cost(logistic_t *lr, vec x, double y) {
+double logr_cost(logistic_t *lr, vector_t x, double y) {
   double y_pred = logr_eval(lr, x);
 
   return (y_pred - y) * (y_pred - y);
 }
 
-void logr_fit(logistic_t *lr, vec X, vec y, int k, int epochs, double alpha) {
+void logr_fit(logistic_t *lr, vector_t X, vector_t y, int k, int epochs,
+              double alpha) {
   int n = lr->n;
 
-  vec dw = vector(n);
+  vector_t dw = vector(n);
 
   for (int epoch = 1; epoch <= epochs; epoch++) {
     double db = 0;

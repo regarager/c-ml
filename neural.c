@@ -1,6 +1,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
+#include "matrix.h"
 #include "neural.h"
 
 layer_t *layer(int in, int out, func activation, func d_activation) {
@@ -21,12 +22,12 @@ layer_t *layer(int in, int out, func activation, func d_activation) {
   return l;
 }
 
-void layer_eval(layer_t *l, vec x, vec z) {
-  Matrix *x_mat = matrix_vec(x, l->in);
-  Matrix *z_mat = matrix_vec(z, l->out);
+void layer_eval(layer_t *l, vector_t x, vector_t z) {
+  matrix_t *x_mat = matrix_vec(x, l->in);
+  matrix_t *z_mat = matrix_vec(z, l->out);
 
-  matmul(l->W, x_mat, z_mat);
-  add(z_mat->values, l->b, z_mat->values, l->out);
+  mat_mul(l->W, x_mat, z_mat);
+  vec_add(z_mat->values, l->b, z_mat->values, l->out);
   MAP(z, l->out, l->activation(z[i]));
 
   free(x_mat);
@@ -57,7 +58,7 @@ neural_t *neural(int L, ...) {
   return nn;
 }
 
-vec neural_eval(neural_t *nn, vec x, vec *activations) {
+vector_t neural_eval(neural_t *nn, vector_t x, vector_t *activations) {
   layer_eval(nn->layers[0], x, activations[0]);
 
   for (int i = 1; i < nn->L; i++) {
@@ -76,8 +77,8 @@ void free_network(neural_t *nn) {
   free(nn);
 }
 
-vec *init_activations(neural_t *nn) {
-  vec *activations = (vec *)calloc(nn->L, sizeof(vec));
+vector_t *init_activations(neural_t *nn) {
+  vector_t *activations = (vector_t *)calloc(nn->L, sizeof(vector_t));
 
   for (int i = 0; i < nn->L; i++) {
     activations[i] = vector(nn->layers[i]->out);
@@ -87,10 +88,10 @@ vec *init_activations(neural_t *nn) {
 }
 
 typedef struct {
-  Matrix *da_dz;
-  Matrix *dz_dw; // wrt weights
-  Matrix *dz_dx; // i think just W?
-  vec dz_db;
+  matrix_t *da_dz;
+  matrix_t *dz_dw; // wrt weights
+  matrix_t *dz_dx; // i think just W?
+  vector_t dz_db;
   func d_activation;
 } _derivative;
 
@@ -109,10 +110,11 @@ _derivative *init_derivative(layer_t *l) {
   return d;
 }
 
-void neural_fit(neural_t *nn, vec X, vec Y, int k, int epochs, double alpha) {
+void neural_fit(neural_t *nn, vector_t X, vector_t Y, int k, int epochs,
+                double alpha) {
   int L = nn->L;
   int in = nn->layers[0]->in;
-  vec *activations = init_activations(nn);
+  vector_t *activations = init_activations(nn);
 
   _derivative **D = (_derivative **)calloc(L, sizeof(_derivative *));
   for (int i = 0; i < L; i++) {
@@ -121,7 +123,7 @@ void neural_fit(neural_t *nn, vec X, vec Y, int k, int epochs, double alpha) {
 
   for (int epoch = 1; epoch <= epochs; epoch++) {
     for (int i = 0; i < k; i++) {
-      vec y = neural_eval(nn, X + i * in, activations);
+      vector_t y = neural_eval(nn, X + i * in, activations);
 
       // TODO: backpropagation
     }

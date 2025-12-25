@@ -2,10 +2,11 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "matrix.h"
 #include "neural.h"
 #include "util.h"
 
-double f(vec x) { return x[0] + 2 * x[1] + 3 * x[2] + 4; }
+double f(vector_t x) { return x[0] + 2 * x[1] + 3 * x[2] + 4; }
 
 int main() {
   srand(time(NULL));
@@ -18,8 +19,8 @@ int main() {
 
   neural_t *nn = neural(L, l1, l2, l3, l4);
 
-  vec x = vec_from(2, 1, 1);
-  vec *activations = init_activations(nn);
+  vector_t x = vector_from(2, 1, 1);
+  vector_t *activations = init_activations(nn);
 
   neural_eval(nn, x, activations);
 

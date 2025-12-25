@@ -4,9 +4,11 @@
 #include "matrix.h"
 #include "util.h"
 
-double *M(Matrix *m, int i, int j) { return m->values + (i * m->n + j); }
+inline double *M(matrix_t *m, int i, int j) {
+  return m->values + (i * m->n + j);
+}
 
-double dot_product(vec a, vec b, int n) {
+double vec_dot(vector_t a, vector_t b, int n) {
   double p = 0;
 
   for (int i = 0; i < n; i++) {
@@ -16,19 +18,19 @@ double dot_product(vec a, vec b, int n) {
   return p;
 }
 
-void add(vec v1, vec v2, vec v3, int n) {
+void vec_add(vector_t v1, vector_t v2, vector_t v3, int n) {
   for (int i = 0; i < n; i++) {
     v3[i] = v1[i] + v2[i];
   }
 }
 
-void mul(vec v1, int c, vec v2, int n) {
+void vec_mul(vector_t v1, int c, vector_t v2, int n) {
   for (int i = 0; i < n; i++) {
     v2[i] = c * v1[i];
   }
 }
 
-void matmul(Matrix *A, Matrix *B, Matrix *C) {
+void mat_mul(matrix_t *A, matrix_t *B, matrix_t *C) {
   int m = A->m;
   int n = A->n;
   int p = C->n;
@@ -44,20 +46,20 @@ void matmul(Matrix *A, Matrix *B, Matrix *C) {
   }
 }
 
-void free_matrix(Matrix *m) {
+void free_matrix(matrix_t *m) {
   free(m->values);
   free(m);
 }
 
-void init_random(vec src, int n) { MAP(src, n, random_float()); }
+void init_random(vector_t src, int n) { MAP(src, n, random_float()); }
 
-vec vector(int n) { return calloc(n, sizeof(double)); }
+vector_t vector(int n) { return calloc(n, sizeof(double)); }
 
-vec vec_from(int n, ...) {
+vector_t vector_from(int n, ...) {
   va_list args;
   va_start(args, n);
 
-  vec v = vector(n);
+  vector_t v = vector(n);
 
   for (int i = 0; i < n; i++) {
     v[i] = va_arg(args, double);
@@ -68,10 +70,10 @@ vec vec_from(int n, ...) {
   return v;
 }
 
-Matrix *matrix(int m, int n) {
-  Matrix *mat = malloc(sizeof(Matrix));
+matrix_t *matrix(int m, int n) {
+  matrix_t *mat = malloc(sizeof(matrix_t));
 
-  *mat = (Matrix){
+  *mat = (matrix_t){
       .m = m,
       .n = n,
       .values = vector(m * n),
@@ -80,10 +82,10 @@ Matrix *matrix(int m, int n) {
   return mat;
 }
 
-Matrix *matrix_from(int m, int n, ...) {
-  Matrix *mat = malloc(sizeof(Matrix));
+matrix_t *matrix_from(int m, int n, ...) {
+  matrix_t *mat = malloc(sizeof(matrix_t));
 
-  *mat = (Matrix){
+  *mat = (matrix_t){
       .m = m,
       .n = n,
       .values = vector(m * n),
@@ -101,10 +103,10 @@ Matrix *matrix_from(int m, int n, ...) {
   return mat;
 }
 
-Matrix *matrix_vec(vec v, int n) {
-  Matrix *mat = malloc(sizeof(Matrix));
+matrix_t *matrix_vec(vector_t v, int n) {
+  matrix_t *mat = malloc(sizeof(matrix_t));
 
-  *mat = (Matrix){
+  *mat = (matrix_t){
       .m = n,
       .n = 1,
       .values = v,

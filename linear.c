@@ -20,20 +20,21 @@ linear_t *linr(int n) {
   return lr;
 }
 
-double linr_eval(linear_t *lr, vec x) {
-  return dot_product(lr->w, x, lr->n) + lr->b;
+double linr_eval(linear_t *lr, vector_t x) {
+  return vec_dot(lr->w, x, lr->n) + lr->b;
 }
 
-double linr_cost(linear_t *lr, vec x, double y) {
+double linr_cost(linear_t *lr, vector_t x, double y) {
   double y_pred = linr_eval(lr, x);
 
   return (y_pred - y) * (y_pred - y);
 }
 
-void linr_fit(linear_t *lr, vec X, vec y, int k, int epochs, double alpha) {
+void linr_fit(linear_t *lr, vector_t X, vector_t y, int k, int epochs,
+              double alpha) {
   int n = lr->n;
 
-  vec dw = vector(n);
+  vector_t dw = vector(n);
 
   for (int epoch = 1; epoch <= epochs; epoch++) {
     double db = 0;
