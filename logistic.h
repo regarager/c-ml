@@ -4,15 +4,15 @@
 #include "matrix.h"
 
 typedef struct {
-  int n;
+  u32 n;
   vector_t w;
-  double b;
+  f64 b;
 } logistic_t;
 
-logistic_t *logr(int n);
-double logr_eval(logistic_t *lr, vector_t x);
-double logr_cost(logistic_t *lr, vector_t x, double y);
-void logr_fit(logistic_t *lr, vector_t X, vector_t y, int k, int epochs,
-              double alpha);
+logistic_t *logr(u32 n);
+f64 logr_eval(logistic_t *lr, vector_t x);
+f64 logr_cost(logistic_t *lr, vector_t x, double y);
+void logr_fit(logistic_t *lr, vector_t X, vector_t y, u32 k, u32 epochs,
+              f64 alpha);
 
 #endif

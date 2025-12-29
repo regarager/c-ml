@@ -6,5 +6,6 @@ FILES="$entry linear.c logistic.c matrix.c neural.c util.c"
 
 set -e
 mkdir -p build
-gcc -Wall -Wextra -lm -g -o build/main $FILES
-./build/main
+gcc -Wall -Wextra -lm -g -pedantic -o main $FILES
+./main
+rm main

@@ -3,9 +3,9 @@
 
 #include "util.h"
 
-double urandom_float() { return 1.0 * rand() / RAND_MAX; }
-double random_float() { return urandom_float() * 2 - 1; }
-double sigmoid(double x) { return 1 / (1 + exp(-x)); }
-double d_sigmoid(double y) { return y * (1 - y); };
-double pass(double x) { return x; }
-double d_pass(double x) { return 1; }
+f64 urandom_float() { return 1.0 * rand() / RAND_MAX; }
+f64 random_float() { return urandom_float() * 2 - 1; }
+f64 sigmoid(f64 x) { return 1 / (1 + exp(-x)); }
+f64 d_sigmoid(f64 y) { return y * (1 - y); }
+f64 pass(f64 x) { return x; }
+f64 d_pass(f64 x) { return 1; }

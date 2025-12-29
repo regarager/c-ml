@@ -6,23 +6,42 @@
 #include "neural.h"
 #include "util.h"
 
-double f(vector_t x) { return x[0] + 2 * x[1] + 3 * x[2] + 4; }
-
 int main() {
   srand(time(NULL));
 
-  int L = 4;
-  layer_t *l1 = layer(2, 100, pass, d_pass);
-  layer_t *l2 = layer(100, 100, sigmoid, d_sigmoid);
-  layer_t *l3 = layer(100, 1, pass, d_pass);
-  layer_t *l4 = layer(1, 1, sigmoid, d_sigmoid);
+  u32 L = 4;
+  layer_t *l0 = layer(2, 10, pass, d_pass);
+  layer_t *l1 = layer(10, 10, sigmoid, d_sigmoid);
+  layer_t *l2 = layer(10, 1, pass, d_pass);
+  layer_t *l3 = layer(1, 1, sigmoid, d_sigmoid);
 
-  neural_t *nn = neural(L, l1, l2, l3, l4);
+  neural_t *nn = neural(L, l0, l1, l2, l3);
 
-  vector_t x = vector_from(2, 1, 1);
+  u32 k = 4;
+
+  vector_t X = vector(4 * 2);
+  X[0] = 0;
+  X[1] = 0;
+  X[2] = 0;
+  X[3] = 1;
+  X[4] = 1;
+  X[5] = 0;
+  X[6] = 1;
+  X[7] = 1;
+
+  vector_t Y = vector(4);
+  Y[0] = 0;
+  Y[1] = 1;
+  Y[2] = 1;
+  Y[3] = 0;
+
+  u32 epochs = 2e5;
+  f64 alpha = 0.5;
+  neural_fit(nn, X, Y, k, epochs, alpha);
+
   vector_t *activations = init_activations(nn);
-
-  neural_eval(nn, x, activations);
-
-  printf("%f\n", activations[3][0]);
+  for (u32 i = 0; i < 4; i++) {
+    neural_eval(nn, X + 2 * i, activations);
+    printf("%f ^ %f = %f\n", (X + 2 * i)[0], (X + 2 * i)[1], activations[3][0]);
+  }
 }

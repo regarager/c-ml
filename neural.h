@@ -4,8 +4,8 @@
 #include "matrix.h"
 
 typedef struct {
-  int in;
-  int out;
+  u32 in;
+  u32 out;
   matrix_t *W;
   vector_t b;
   func activation;
@@ -13,21 +13,21 @@ typedef struct {
 } layer_t;
 
 typedef struct {
-  int L;
+  u32 L;
   layer_t **layers;
 } neural_t;
 
-double pass(double x);
-double d_pass(double x);
+f64 pass(f64 x);
+f64 d_pass(f64 x);
 
-layer_t *layer(int in, int out, func activation, func d_activation);
+layer_t *layer(u32 in, u32 out, func activation, func d_activation);
 void layer_eval(layer_t *l, vector_t x, vector_t z);
 void free_layer(layer_t *l);
 
-neural_t *neural(int L, ...);
+neural_t *neural(u32 L, ...);
 vector_t neural_eval(neural_t *nn, vector_t x, vector_t *activations);
-void neural_fit(neural_t *nn, vector_t X, vector_t Y, int k, int epochs,
-                double alpha);
+void neural_fit(neural_t *nn, vector_t X, vector_t Y, u32 k, u32 epochs,
+                f64 alpha);
 void free_network(neural_t *nn);
 
 vector_t *init_activations(neural_t *nn);
