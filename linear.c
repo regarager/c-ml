@@ -1,12 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "linear.h"
 #include "matrix.h"
 #include "util.h"
 
-linear_t *linr(int n) {
+linear_t *make_linr(u32 n) {
   linear_t *lr = (linear_t *)malloc(sizeof(linear_t));
 
   *lr = (linear_t){
@@ -20,48 +19,37 @@ linear_t *linr(int n) {
   return lr;
 }
 
-double linr_eval(linear_t *lr, vector_t x) {
+f64 linr_eval(linear_t *lr, vector_t x) {
   return vec_dot(lr->w, x, lr->n) + lr->b;
 }
 
-double linr_cost(linear_t *lr, vector_t x, double y) {
-  double y_pred = linr_eval(lr, x);
-
-  return (y_pred - y) * (y_pred - y);
-}
-
-void linr_fit(linear_t *lr, vector_t X, vector_t y, int k, int epochs,
-              double alpha) {
-  int n = lr->n;
-
+void linr_fit(linear_t *lr, vector_t X, vector_t y, u32 k, u32 epochs,
+              f64 alpha) {
+  u32 n = lr->n;
   vector_t dw = vector(n);
 
-  for (int epoch = 1; epoch <= epochs; epoch++) {
-    double db = 0;
+  for (u32 epoch = 1; epoch <= epochs; epoch++) {
+    f64 db = 0, cost = 0;
 
-    double cost = 0;
-
-    for (int i = 0; i < k; i++) {
-      double error = (linr_eval(lr, X + n * i) - y[i]) / k;
+    for (u32 i = 0; i < k; i++) {
+      f64 error = (linr_eval(lr, X + n * i) - y[i]) / k;
       cost += error * error * k * 0.5;
 
-      for (int j = 0; j < n; j++) {
+      for (u32 j = 0; j < n; j++) {
         dw[j] += *(X + n * i + j) * error;
       }
+
       db += error;
     }
 
-    for (int i = 0; i < n; i++) {
+    for (u32 i = 0; i < n; i++) {
       lr->w[i] -= dw[i] * alpha;
+      dw[i] = 0;
     }
 
     lr->b -= db * alpha;
 
-    memset(dw, 0, n * sizeof(double));
-
-    if (epoch == 1 || epoch % 1000 == 0) {
-      printf("epoch: %d, cost: %f\n", epoch, cost);
-    }
+    printf("epoch: %d, cost: %f\n", epoch, cost);
   }
 
   free(dw);
