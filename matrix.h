@@ -26,7 +26,6 @@ f64 vec_dot(vector_t a, vector_t b, u32 n);
 f64 *M(matrix_t *m, u32 i, u32 j);
 f64 mat_unwrap(matrix_t *m);
 matrix_t *matrix(u32 m, u32 n);
-matrix_t *matrix_id(u32 n);
 matrix_t *matrix_from(u32 m, u32 n, ...);
 matrix_t matrix_vec(u32 m, u32 n, vector_t v);
 void mat_mul(matrix_t *A, matrix_t *B, matrix_t *C);
