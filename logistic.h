@@ -11,7 +11,6 @@ typedef struct {
 
 logistic_t *logr(u32 n);
 f64 logr_eval(logistic_t *lr, vector_t x);
-f64 logr_cost(logistic_t *lr, vector_t x, double y);
 void logr_fit(logistic_t *lr, vector_t X, vector_t y, u32 k, u32 epochs,
               f64 alpha);
 

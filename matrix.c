@@ -6,6 +6,7 @@
 #include "util.h"
 
 inline f64 *M(matrix_t *m, u32 i, u32 j) { return m->values + (i * m->n + j); }
+
 f64 mat_unwrap(matrix_t *m) {
   assert(m->m == m->n);
   return *m->values;
@@ -81,23 +82,6 @@ matrix_t *matrix(u32 m, u32 n) {
       .n = n,
       .values = vector(m * n),
   };
-
-  return mat;
-}
-
-// WARN: may be unnecessary
-matrix_t *matrix_id(u32 n) {
-  matrix_t *mat = malloc(sizeof(matrix_t));
-
-  *mat = (matrix_t){
-      .m = n,
-      .n = n,
-      .values = vector(n * n),
-  };
-
-  for (u32 i = 0; i < n; i++) {
-    *M(mat, i, i) = 1;
-  }
 
   return mat;
 }
