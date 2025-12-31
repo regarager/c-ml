@@ -1,21 +1,17 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
 
 #include "matrix.h"
 #include "neural.h"
 #include "util.h"
 
 int main() {
-  srand(time(NULL));
-
   u32 L = 4;
-  layer_t *l0 = layer(2, 10, pass, d_pass);
-  layer_t *l1 = layer(10, 10, sigmoid, d_sigmoid);
-  layer_t *l2 = layer(10, 1, pass, d_pass);
-  layer_t *l3 = layer(1, 1, sigmoid, d_sigmoid);
+  layer_t *l0 = make_layer(2, 10, pass, d_pass);
+  layer_t *l1 = make_layer(10, 10, sigmoid, d_sigmoid);
+  layer_t *l2 = make_layer(10, 1, pass, d_pass);
+  layer_t *l3 = make_layer(1, 1, sigmoid, d_sigmoid);
 
-  neural_t *nn = neural(L, l0, l1, l2, l3);
+  neural_t *nn = make_neural(L, l0, l1, l2, l3);
 
   u32 k = 4;
 
@@ -35,7 +31,7 @@ int main() {
   Y[2] = 1;
   Y[3] = 0;
 
-  u32 epochs = 2e5;
+  u32 epochs = 1e5;
   f64 alpha = 0.5;
   neural_fit(nn, X, Y, k, epochs, alpha);
 
