@@ -9,7 +9,7 @@ typedef struct {
   f64 b;
 } logistic_t;
 
-logistic_t *logr(u32 n);
+logistic_t *make_logr(u32 n);
 f64 logr_eval(logistic_t *lr, vector_t x);
 void logr_fit(logistic_t *lr, vector_t X, vector_t y, u32 k, u32 epochs,
               f64 alpha);

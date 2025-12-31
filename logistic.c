@@ -4,7 +4,7 @@
 #include "logistic.h"
 #include "util.h"
 
-logistic_t *logr(u32 n) {
+logistic_t *make_logr(u32 n) {
   logistic_t *lr = (logistic_t *)malloc(sizeof(logistic_t));
 
   *lr = (logistic_t){

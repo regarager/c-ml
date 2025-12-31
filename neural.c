@@ -6,7 +6,7 @@
 #include "matrix.h"
 #include "neural.h"
 
-layer_t *layer(u32 in, u32 out, func activation, func d_activation) {
+layer_t *make_layer(u32 in, u32 out, func activation, func d_activation) {
   layer_t *l = (layer_t *)malloc(sizeof(layer_t));
 
   *l = (layer_t){
@@ -57,7 +57,7 @@ void free_layer(layer_t *l) {
   free(l);
 }
 
-neural_t *neural(u32 L, ...) {
+neural_t *make_neural(u32 L, ...) {
   neural_t *nn = malloc(sizeof(neural_t));
 
   nn->L = L;
